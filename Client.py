@@ -23,7 +23,7 @@ class Client():
                 data = self.clientsocket.recv(1024).hex()
                 if self.imei == "":
 
-                    self.imei = data.hex()
+                    self.imei = data.decode('hex')
                     print(self.imei)
                     continue
                 decoded = Decode(data)
