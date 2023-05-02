@@ -25,12 +25,12 @@ class Client():
             except:
                 pass
             
-            try:
-                decoded = Decode(data)
-                print(data)
+        try:
+            decoded = Decode(data)
+            print(data)
 
-            except:
-                return
+        except:
+            return
       
         
     def sendToApi(self, data):
