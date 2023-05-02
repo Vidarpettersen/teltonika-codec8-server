@@ -24,9 +24,10 @@ class Client():
                 data = self.clientsocket.recv(1024).decode('hex')
                 print(data)
             except:
+                print("Error")
                 return
-            decoded = Decode(data)
-            print(decoded.getJson())
+        #decoded = Decode(data)
+        #print(decoded.getJson())
         
     def sendToApi(self, data):
         try:
