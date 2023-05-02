@@ -3,6 +3,7 @@ import config
 from Log import Log
 import blacklist
 from TeltonikaCodec8Decoder.decoder import Decode
+import codecs
 
 class Client():
     def __init__(self, clientsocket, address):
@@ -23,7 +24,7 @@ class Client():
                 data = self.clientsocket.recv(1024).hex()
                 if self.imei == "":
 
-                    self.imei = data.decode('hex')
+                    self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
                     print(self.imei)
                     continue
                 decoded = Decode(data)
