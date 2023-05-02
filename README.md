@@ -33,7 +33,7 @@ python3 teltonika-codec8-server.py
 ## Install Service
 1. Copy the service to the service folder
 ```
-sudo cp /opt/Device-Import/service/teltonika-codec8-server.service /etc/systemd/system/teltonika-codec8-server.service
+sudo cp /opt/teltonika-codec8-server/service/teltonika-codec8-server.service /etc/systemd/system/teltonika-codec8-server.service
 ```
 
 2. Reload the system deamon
