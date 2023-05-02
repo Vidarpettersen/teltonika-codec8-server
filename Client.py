@@ -27,8 +27,7 @@ class Client():
             
         try:
             decoded = Decode(data)
-            print(data)
-
+            print(decoded.getJson())
         except:
             return
       
