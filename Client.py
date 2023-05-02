@@ -21,7 +21,7 @@ class Client():
                 return
             try:
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-                data += self.clientsocket.recv(1024).decode('hex')
+                data = self.clientsocket.recv(1024).decode('hex')
                 print(data)
             except:
                 return
