@@ -1,0 +1,17 @@
+[Unit]
+Description=Device Import Service SSL
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/Device-Import/serviceSSL.py
+ExecStop=/bin/bash /opt/Device-Import/service/stopSSL.sh
+WorkingDirectory=/opt/Device-Import
+Restart=always
+RestartSec=5
+TimeoutSec=60
+RuntimeMaxSec=infinity
+PIDFile=/tmp/device-import.pid
+
+[Install]
+WantedBy=multi-user.target
