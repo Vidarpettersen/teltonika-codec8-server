@@ -18,10 +18,17 @@ class Client():
         while self.active:
             if blacklist.isBlacklisted(self.address):
                 return
+            try:
+                self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
+                data = self.clientsocket.recv(1024).hex()
+            except:
+                pass
             
-            self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-            data = self.clientsocket.recv(1024).hex()
-            print(data)
+            try:
+                decoded = Decode(data)
+                print(decoded.getJson())
+            except:
+                return
       
         
     def sendToApi(self, data):
