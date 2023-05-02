@@ -20,7 +20,7 @@ class Client():
                 return
             
             self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-            data = self.clientsocket.recv(1024).hex().decode('hex')
+            data = self.clientsocket.recv(1024).hex()
             print(data)
       
         
