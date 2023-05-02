@@ -15,12 +15,13 @@ class Client():
         Log(f"{str(self.address)}: New connection")
     
     def run(self):
+        data = ""
         while self.active:
             if blacklist.isBlacklisted(self.address):
                 return
             try:
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-                data = self.clientsocket.recv(1024).hex()
+                data += self.clientsocket.recv(1024).hex()
             except:
                 pass
             
