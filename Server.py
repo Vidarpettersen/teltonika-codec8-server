@@ -25,7 +25,6 @@ class Server():
         self.socket.listen(config.LISTEN_QUE)
         while True:
             clientsocket, address = self.socket.accept()
-            print(address[0])
             if not whitelist.isWhitelisted(address[0]):
                 Log(f"{address[0]}: Is not whitelisted")
                 continue

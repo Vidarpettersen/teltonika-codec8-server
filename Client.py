@@ -22,7 +22,9 @@ class Client():
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
                 data = self.clientsocket.recv(1024).hex()
                 if self.imei == "":
+
                     self.imei = data
+                    print(self.imei)
                     continue
                 decoded = Decode(data)
                 for json in decoded.toApi():
