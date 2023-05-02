@@ -4,6 +4,7 @@ from Log import Log
 import blacklist
 from TeltonikaCodec8Decoder.decoder import Decode
 import codecs
+import time
 
 class Client():
     def __init__(self, clientsocket, address):
@@ -28,12 +29,13 @@ class Client():
                 decoded = Decode(data)
                 for json in decoded.toApi():
                     self.sendToApi(json)
+                    time.sleep(100)
             except:
                 return
 
         
     def sendToApi(self, data):
-        json={"token": self.imei, "data": "["+data+"]"}
+        json={"token": self.imei, "data": "{"+data+"}"}
         try:
             r = requests.post(config.API_ADDRESS, json=json)
             if r.status_code:
