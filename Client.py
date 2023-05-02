@@ -21,19 +21,18 @@ class Client():
             try:
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
                 data = self.clientsocket.recv(1024).hex()
-            except:
-                return
-            
-            try:
+                if self.imei == "":
+                    self.imei = data
+                    continue
                 decoded = Decode(data)
-                print(decoded.getJson())
+                for json in decoded.toApi():
+                    self.sendToApi(self, json)
             except:
-                return
-      
+                return     
         
     def sendToApi(self, data):
+        json={"token": self.imei, "data": data}
         try:
-            json={"token": self.imei, "data": data}
             r = requests.post(config.API_ADDRESS, json=json)
             if r.status_code:
                 text = r.status_code
