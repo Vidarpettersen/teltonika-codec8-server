@@ -35,7 +35,7 @@ class Client():
 
         
     def sendToApi(self, data):
-        json={"token": self.imei, "data": "{"+data+"}"}
+        json={"token": self.imei, "data": data }
         try:
             r = requests.post(config.API_ADDRESS, json=json)
             if r.status_code:
