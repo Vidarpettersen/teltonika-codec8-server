@@ -28,7 +28,7 @@ class Client():
                 continue
             decoded = Decode(data)
             for json in decoded.toApi():
-                print(json)
+                self.sendToApi(json)
 
         
     def sendToApi(self, data):
