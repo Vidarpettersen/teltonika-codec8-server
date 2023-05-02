@@ -1,4 +1,4 @@
-# Device-Import
+# Teltonika Codec 8 Server
 
 ## How it works
 #### Server class
@@ -23,17 +23,17 @@ cd /opt
 ```
 Clone the git repo
 ```
-sudo git clone git@github.com:Vidarpettersen/Device-Import.git
+sudo git clone git@github.com:Vidarpettersen/teltonika-codec8-server.git
 ```
 Start the script
 ```
-python3 service.py
+python3 teltonika-codec8-server.py
 ```
 
 ## Install Service
 1. Copy the service to the service folder
 ```
-sudo cp /opt/Device-Import/service/device-import.service /etc/systemd/system/device-import.service
+sudo cp /opt/Device-Import/service/teltonika-codec8-server.service /etc/systemd/system/teltonika-codec8-server.service
 ```
 
 2. Reload the system deamon
@@ -43,28 +43,28 @@ sudo systemctl daemon-reload
 
 3. Enable service so it doesn't get dissabled if the server restarts
 ```
-sudo systemctl enable device-import.service
+sudo systemctl enable teltonika-codec8-server.service
 ```
 
 ## Commands
 #### Start service
 ```
-sudo systemctl start device-import.service
+sudo systemctl start teltonika-codec8-server.service
 ```
 
 #### Stop service 
 ```
-sudo systemctl stop device-import.service
+sudo systemctl stop teltonika-codec8-server.service
 ```
 
 #### Restart service
 ```
-sudo systemctl restart device-import.service
+sudo systemctl restart teltonika-codec8-server.service
 ```
 
 #### Status on service
 ```
-sudo systemctl status device-import.service
+sudo systemctl status teltonika-codec8-server.service
 ```
 
 #### Status of all services
