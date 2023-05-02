@@ -29,7 +29,6 @@ class Client():
                 decoded = Decode(data)
                 for json in decoded.toApi():
                     self.sendToApi(json)
-                    time.sleep(100)
             except:
                 return
 
