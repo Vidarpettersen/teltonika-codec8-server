@@ -4,9 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /opt/Device-Import/service.py
-ExecStop=/bin/bash /opt/Device-Import/service/stop.sh
-WorkingDirectory=/opt/Device-Import
+ExecStart=/usr/bin/python3 /opt/teltonika-codec8-server/teltonika-codec8-server.py
+ExecStop=/bin/bash /opt/teltonika-codec8-server/service/stop.sh
+WorkingDirectory=/opt/teltonika-codec8-server
 Restart=always
 RestartSec=5
 TimeoutSec=60

@@ -1,5 +1,4 @@
-SERVER_PORT = 55555
-SERVER_PORT_SSL = 55556
+SERVER_PORT = 55556
 LISTEN_QUE = 10
 API_ADDRESS = "https://minbat.no/api/deviceimport"
 ADMIN_MAIL = "vidar.pettersen@smbparter.no"

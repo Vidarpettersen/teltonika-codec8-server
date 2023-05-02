@@ -19,12 +19,8 @@ class Client():
                 return
             try:
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-                data = self.clientsocket.recv(1024).decode('utf-8')
-                if self.imei == "":
-                    self.imei = data
-                    Log(f"{str(self.address)}: {self.imei}")
-                    continue
-                self.sendToApi(data)
+                data = self.clientsocket.recv(1024).decode('hex')
+                print(data)
             except:
                 return
         
