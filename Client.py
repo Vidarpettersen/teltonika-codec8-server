@@ -15,19 +15,16 @@ class Client():
         Log(f"{str(self.address)}: New connection")
     
     def run(self):
-        data = ""
         while self.active:
             if blacklist.isBlacklisted(self.address):
                 return
             try:
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-                data += self.clientsocket.recv(1024).hex().decode('hex')
+                data = self.clientsocket.recv(1024).hex().decode('hex')
                 print(data)
             except:
                 print("Error")
                 return
-        decoded = Decode(data)
-        print(decoded.getJson())
         
     def sendToApi(self, data):
         try:
