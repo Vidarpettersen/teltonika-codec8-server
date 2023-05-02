@@ -30,6 +30,7 @@ class Client():
                 for json in decoded.toApi():
                     self.sendToApi(self, json)
             except:
+                print("Error")
                 return     
         
     def sendToApi(self, data):
