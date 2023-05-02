@@ -24,11 +24,10 @@ class Client():
                 data = self.clientsocket.recv(1024).hex()
                 if self.imei == "":
                     self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
-                    print(self.imei)
                     continue
                 decoded = Decode(data)
                 for json in decoded.toApi():
-                    self.sendToApi(json)
+                    self.sendToApi(json.decode('utf-8'))
             except:
                 return
 
