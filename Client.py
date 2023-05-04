@@ -20,15 +20,17 @@ class Client():
         while self.active:
             if blacklist.isBlacklisted(self.address):
                 return
-            
-            self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-            data = self.clientsocket.recv(1024).hex()
-            if self.imei == "":
-                self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
-                continue
-            decoded = Decode(data)
-            for json in decoded.toJson():
-                self.sendToApi(json)
+            try:
+                self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
+                data = self.clientsocket.recv(1024).hex()
+                if self.imei == "":
+                    self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
+                    continue
+                decoded = Decode(data)
+                for json in decoded.toJson():
+                    self.sendToApi(json)
+            except Exception as e:
+                print(e)
         
 
         
