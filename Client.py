@@ -27,7 +27,7 @@ class Client():
                 self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
                 continue
             decoded = Decode(data)
-            for json in decoded.toApi():
+            for json in decoded.toJson():
                 self.sendToApi(json)
         
 
