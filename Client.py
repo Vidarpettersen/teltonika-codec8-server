@@ -30,7 +30,7 @@ class Client():
                 for json in decoded.toJson():
                     self.sendToApi(json)
             except Exception as e:
-                print(e)
+                self.__del__()
         
 
         
