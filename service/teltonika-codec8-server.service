@@ -1,5 +1,5 @@
 [Unit]
-Description=Device Import Service
+Description=Teltonika Codec 8 Server
 After=network.target
 
 [Service]
