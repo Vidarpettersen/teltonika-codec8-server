@@ -25,7 +25,6 @@ class Client():
                 if self.imei == "":
                     self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
                     continue
-                print(data)
                 decoder = Decoder()
                 decoder.decode(data)
                 for json in decoder.toJson():
