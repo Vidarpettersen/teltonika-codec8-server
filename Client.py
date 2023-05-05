@@ -2,9 +2,8 @@ import requests
 import config
 from Log import Log
 import blacklist
-from TeltonikaCodec8Decoder.decoder import Decode
+from TeltonikaCodec8Decoder.decoder import Decoder
 import codecs
-import time
 
 class Client():
     def __init__(self, clientsocket, address):
@@ -26,8 +25,9 @@ class Client():
                 if self.imei == "":
                     self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
                     continue
-                decoded = Decode(data)
-                for json in decoded.toJson():
+                decoder = Decoder()
+                decoder.decode(data)
+                for json in decoder.toJson():
                     self.sendToApi(json)
             except Exception as e:
                 return
