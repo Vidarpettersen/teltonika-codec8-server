@@ -28,7 +28,7 @@ class Client():
                 decoder = Decoder()
                 decoder.decode(data)
                 for json in decoder.toJson():
-                    print(json)
+                    #print(json)
                     self.sendToApi(json)
             except Exception as e:
                 return
