@@ -5,6 +5,7 @@ from Log import Log
 import blacklist
 from TeltonikaCodec8Decoder.decoder import Decoder
 import codecs
+import re
 
 class Client():
     def __init__(self, clientsocket, address):
@@ -15,6 +16,27 @@ class Client():
         self.address = address[0]
         self.port = address[1]
         Log(f"{str(self.address)}: New connection")
+    
+    def clean_json_string(self, json_str):
+        """Clean malformed JSON with Python byte string representations"""
+        # Replace patterns like "b'\x03'" with proper hex strings
+        def replace_byte_string(match):
+            byte_str = match.group(1)
+            try:
+                # Evaluate the Python byte string representation
+                byte_value = eval(byte_str)
+                if isinstance(byte_value, bytes):
+                    # Convert to hex string
+                    return f'"{byte_value.hex()}"'
+                return f'"{str(byte_value)}"'
+            except:
+                # If evaluation fails, return the original as a string
+                return f'"{byte_str}"'
+        
+        # Pattern to match "b'...'" or 'b"..."'
+        pattern = r'"(b\'[^\']*\'|b"[^"]*")"'
+        cleaned = re.sub(pattern, replace_byte_string, json_str)
+        return cleaned
     
     def run(self):
         while self.active:
@@ -73,8 +95,6 @@ class Client():
                 Log(f"{str(self.address)}: Acknowledged {record_count} records")
                 
                 for record in records:
-                    # Debug: log raw record data
-                    Log(f"{str(self.address)}: Raw record type: {type(record).__name__}, first 200 chars: {str(record)[:200]}")
                     self.sendToApi(record)
             except Exception as e:
                 Log(f"{str(self.address)}: Error - {str(e)}")
@@ -85,14 +105,17 @@ class Client():
     def sendToApi(self, data):
         # Parse JSON string to avoid double-encoding
         try:
-            # decoder.toJson() returns JSON strings, so we need to parse them
-            parsed_data = json.loads(data) if isinstance(data, str) else data
+            # decoder.toJson() returns JSON strings, but sometimes with Python byte representations
+            # Clean the JSON first to fix invalid escape sequences
+            if isinstance(data, str):
+                cleaned_data = self.clean_json_string(data)
+                parsed_data = json.loads(cleaned_data)
+            else:
+                parsed_data = data
         except json.JSONDecodeError as e:
             Log(f"{str(self.address)}: Failed to parse JSON: {str(e)}")
+            Log(f"{str(self.address)}: Problematic data: {data[:300]}")
             parsed_data = data
-        
-        # Debug: log the type and a sample of what we're sending
-        Log(f"{str(self.address)}: Sending data type: {type(parsed_data).__name__}")
         
         payload = {"token": self.imei, "data": parsed_data}
         try:
