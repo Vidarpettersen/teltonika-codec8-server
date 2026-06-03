@@ -1,4 +1,5 @@
 import requests
+import json
 import config
 from Log import Log
 import blacklist
@@ -71,9 +72,9 @@ class Client():
                 self.clientsocket.send(response)
                 Log(f"{str(self.address)}: Acknowledged {record_count} records")
                 
-                for json in records:
-                    #print(json)
-                    self.sendToApi(json)
+                for record in records:
+                    #print(record)
+                    self.sendToApi(record)
             except Exception as e:
                 Log(f"{str(self.address)}: Error - {str(e)}")
                 return
@@ -81,9 +82,15 @@ class Client():
 
         
     def sendToApi(self, data):
-        json={"token": self.imei, "data": data }
+        # Parse JSON string to avoid double-encoding
         try:
-            r = requests.post(config.API_ADDRESS, json=json)
+            parsed_data = json.loads(data) if isinstance(data, str) else data
+        except:
+            parsed_data = data
+        
+        payload = {"token": self.imei, "data": parsed_data}
+        try:
+            r = requests.post(config.API_ADDRESS, json=payload)
             if r.status_code:
                 text = r.status_code
                 if r.content:
