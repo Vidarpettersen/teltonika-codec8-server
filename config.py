@@ -1,6 +1,6 @@
 SERVER_PORT = 55556
 LISTEN_QUE = 10
-API_ADDRESS = "https://minbat.no/api/deviceimport"
+API_ADDRESS = "https://api.minbat.no/api/deviceimport"
 ADMIN_MAIL = "vidar.pettersen@smbparter.no"
 SOCKET_TIMEOUT = 20
 CERT_PEM = "/opt/Device-Import-Keys/rootCA.pem"
