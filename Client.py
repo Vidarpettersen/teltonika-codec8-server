@@ -21,15 +21,27 @@ class Client():
                 return
             try:
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-                data = self.clientsocket.recv(1024).hex()
+                data = self.clientsocket.recv(1024)
+                
+                if not data:
+                    # Connection closed by client
+                    return
+                
+                data_hex = data.hex()
+                
                 if self.imei == "":
-                    self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
+                    # First 2 bytes (4 hex chars) are the IMEI length, skip them
+                    imei_data = data_hex[4:]  # Skip length prefix
+                    self.imei = codecs.decode(imei_data, 'hex').decode('ascii')
                     # Send acceptance acknowledgment (0x01) after receiving IMEI
                     self.clientsocket.send(bytes.fromhex('01'))
                     Log(f"{str(self.address)}: IMEI accepted: {self.imei}")
                     continue
+                
+                # AVL data packet received
+                Log(f"{str(self.address)}: Received {len(data)} bytes of AVL data")
                 decoder = Decoder()
-                decoder.decode(data)
+                decoder.decode(data_hex)
                 records = list(decoder.toJson())
                 record_count = len(records)
                 
@@ -42,6 +54,7 @@ class Client():
                     #print(json)
                     self.sendToApi(json)
             except Exception as e:
+                Log(f"{str(self.address)}: Error - {str(e)}")
                 return
         
 
