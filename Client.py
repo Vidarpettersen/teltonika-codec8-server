@@ -89,23 +89,28 @@ class Client():
                 if r.content:
                     text = f"{text} - {r.content.decode('utf-8')}"
                 if r.status_code == 200:
-                    return Log(f"{str(self.address)}: {text}")
+                    return Log(f"{str(self.address)}: API - {text}")
                 if r.status_code == 403:
                     blacklist.add(self.address)
-                    return Log(f"{str(self.address)}: {text}")
+                    return Log(f"{str(self.address)}: API - {text}")
+                if r.status_code == 404:
+                    return Log(f"{str(self.address)}: API - 404 - Endpoint not found")
                 if r.status_code == 406:
-                    Log(f"{str(self.address)}: {text}")
+                    Log(f"{str(self.address)}: API - {text}")
                     self.active = False
                     return 
                 if r.status_code == 429:
-                    return Log(f"{str(self.address)}: 429 - Too Many Requests")
-                
+                    return Log(f"{str(self.address)}: API - 429 - Too Many Requests")
                 if r.status_code == 500:
-                    return Log(f"{str(self.address)}: 500 - Server Error")
+                    return Log(f"{str(self.address)}: API - 500 - Server Error")
                 
-                Log(f"{str(self.address)}: {r.status_code} - Ukjent feilmelding")
-        except:
-            Log(f"{str(self.address)}: 404")
+                Log(f"{str(self.address)}: API - {r.status_code} - Ukjent feilmelding")
+        except requests.exceptions.ConnectionError:
+            Log(f"{str(self.address)}: API - Connection failed (is API server running?)")
+        except requests.exceptions.Timeout:
+            Log(f"{str(self.address)}: API - Request timeout")
+        except Exception as e:
+            Log(f"{str(self.address)}: API - Error: {str(e)}")
 
     def __del__(self):
         Log(f"{str(self.address)}: Connection closed")
