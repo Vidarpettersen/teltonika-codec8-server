@@ -84,9 +84,14 @@ class Client():
     def sendToApi(self, data):
         # Parse JSON string to avoid double-encoding
         try:
+            # decoder.toJson() returns JSON strings, so we need to parse them
             parsed_data = json.loads(data) if isinstance(data, str) else data
-        except:
+        except json.JSONDecodeError as e:
+            Log(f"{str(self.address)}: Failed to parse JSON: {str(e)}")
             parsed_data = data
+        
+        # Debug: log the type and a sample of what we're sending
+        Log(f"{str(self.address)}: Sending data type: {type(parsed_data).__name__}")
         
         payload = {"token": self.imei, "data": parsed_data}
         try:
