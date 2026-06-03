@@ -73,7 +73,8 @@ class Client():
                 Log(f"{str(self.address)}: Acknowledged {record_count} records")
                 
                 for record in records:
-                    #print(record)
+                    # Debug: log raw record data
+                    Log(f"{str(self.address)}: Raw record type: {type(record).__name__}, first 200 chars: {str(record)[:200]}")
                     self.sendToApi(record)
             except Exception as e:
                 Log(f"{str(self.address)}: Error - {str(e)}")
