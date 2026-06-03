@@ -21,15 +21,14 @@ class Client():
                 return
             try:
                 self.clientsocket.settimeout(config.SOCKET_TIMEOUT)
-                data = self.clientsocket.recv(1024)
-                
-                if not data:
-                    # Connection closed by client
-                    return
-                
-                data_hex = data.hex()
                 
                 if self.imei == "":
+                    # Read IMEI packet (2 bytes length + IMEI string)
+                    data = self.clientsocket.recv(1024)
+                    if not data:
+                        return
+                    
+                    data_hex = data.hex()
                     # First 2 bytes (4 hex chars) are the IMEI length, skip them
                     imei_data = data_hex[4:]  # Skip length prefix
                     self.imei = codecs.decode(imei_data, 'hex').decode('ascii')
@@ -38,8 +37,30 @@ class Client():
                     Log(f"{str(self.address)}: IMEI accepted: {self.imei}")
                     continue
                 
-                # AVL data packet received
-                Log(f"{str(self.address)}: Received {len(data)} bytes of AVL data")
+                # Read AVL data packet header (8 bytes: 4 preamble + 4 length)
+                header = self.clientsocket.recv(8)
+                if not header or len(header) < 8:
+                    return
+                
+                # Parse data length from bytes 4-7 (big-endian)
+                data_length = int.from_bytes(header[4:8], byteorder='big')
+                
+                # Read the exact amount of data + 2 bytes CRC
+                remaining_bytes = data_length + 2
+                data_parts = []
+                while remaining_bytes > 0:
+                    chunk = self.clientsocket.recv(min(remaining_bytes, 4096))
+                    if not chunk:
+                        break
+                    data_parts.append(chunk)
+                    remaining_bytes -= len(chunk)
+                
+                # Combine all parts
+                full_packet = header + b''.join(data_parts)
+                data_hex = full_packet.hex()
+                
+                Log(f"{str(self.address)}: Received {len(full_packet)} bytes of AVL data")
+                
                 decoder = Decoder()
                 decoder.decode(data_hex)
                 records = list(decoder.toJson())
