@@ -24,10 +24,21 @@ class Client():
                 data = self.clientsocket.recv(1024).hex()
                 if self.imei == "":
                     self.imei = codecs.decode(''.join(data),'hex').decode('ascii')
+                    # Send acceptance acknowledgment (0x01) after receiving IMEI
+                    self.clientsocket.send(bytes.fromhex('01'))
+                    Log(f"{str(self.address)}: IMEI accepted: {self.imei}")
                     continue
                 decoder = Decoder()
                 decoder.decode(data)
-                for json in decoder.toJson():
+                records = list(decoder.toJson())
+                record_count = len(records)
+                
+                # Send number of records received as 4-byte integer (big-endian)
+                response = record_count.to_bytes(4, byteorder='big')
+                self.clientsocket.send(response)
+                Log(f"{str(self.address)}: Acknowledged {record_count} records")
+                
+                for json in records:
                     #print(json)
                     self.sendToApi(json)
             except Exception as e:
